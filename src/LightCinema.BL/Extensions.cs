@@ -1,6 +1,6 @@
 ﻿namespace LightCinema.Core;
 
-public class AddMoviesCommand
+public sealed class Extensions
 {
     
 }
