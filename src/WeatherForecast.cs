@@ -1,4 +1,4 @@
-namespace LightCinema;
+namespace LightCinema.WebApi;
 
 public class WeatherForecast
 {

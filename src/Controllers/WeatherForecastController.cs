@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace LightCinema.Controllers;
+namespace LightCinema.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
