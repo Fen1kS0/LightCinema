@@ -10,6 +10,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Session> Sessions { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Country> Countries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
