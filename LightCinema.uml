@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>d1e4098d-6f91-406a-b77f-9d814ade2efd.DATABASE:LightCinema</OriginalElement>
+  <nodes>
+    <node x="219.43253352947409" y="-95.08473282442782">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Countries</node>
+    <node x="-382.92824427480906" y="144.42213740457993">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Users</node>
+    <node x="-395.62442748091604" y="640.9526717557253">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.__EFMigrationsHistory</node>
+    <node x="180.43253352947409" y="96.42213740457993">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Sessions</node>
+    <node x="533.6126166242577" y="-94.58473282442782">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.CountryMovie</node>
+    <node x="542.1126166242577" y="384.4290076335877">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.GenreMovie</node>
+    <node x="222.43253352947409" y="383.9290076335877">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Genres</node>
+    <node x="-112.74754956530961" y="132.92213740457993">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Reservations</node>
+    <node x="535.1126166242577" y="96.42213740457993">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Movies</node>
+    <node x="-134.2475495653096" y="297.80229007633585">d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Places</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.CountryMovie" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Countries" relationship="REFERENCES">
+      <point x="38.75" y="-43.5" />
+      <point x="649.8626166242577" y="-51.08473282442782" />
+      <point x="294.4325335294741" y="-51.08473282442782" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.GenreMovie" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Genres" relationship="REFERENCES">
+      <point x="34.5" y="-43.5" />
+      <point x="645.6126166242577" y="427.9290076335877" />
+      <point x="294.4325335294741" y="427.9290076335877" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Reservations" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Users" relationship="REFERENCES">
+      <point x="-48.33333333333334" y="-55.5" />
+      <point x="-88.58088289864295" y="188.42213740457993" />
+      <point x="-321.92824427480906" y="188.42213740457993" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Reservations" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Sessions" relationship="REFERENCES">
+      <point x="0.0" y="-55.5" />
+      <point x="-40.24754956530961" y="188.42213740457993" />
+      <point x="294.4325335294741" y="188.42213740457993" />
+      <point x="0.0" y="92.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.GenreMovie" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Movies" relationship="REFERENCES">
+      <point x="-34.5" y="-43.5" />
+      <point x="611.1126166242577" y="384.4290076335877" />
+      <point x="611.1126166242577" y="304.4221374045799" />
+      <point x="38.0" y="104.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Sessions" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Movies" relationship="REFERENCES">
+      <point x="0.0" y="-92.0" />
+      <point x="294.4325335294741" y="188.42213740457993" />
+      <point x="573.1126166242577" y="188.42213740457993" />
+      <point x="-38.0" y="104.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.CountryMovie" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Movies" relationship="REFERENCES">
+      <point x="-38.75" y="-43.5" />
+      <point x="572.3626166242577" y="-11.080583816796775" />
+      <point x="611.1126166242577" y="-11.080583816796775" />
+      <point x="611.1126166242577" y="98.56827114503648" />
+      <point x="649.1126166242577" y="98.56827114503648" />
+      <point x="38.0" y="104.0" />
+    </edge>
+    <edge source="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Reservations" target="d1e4098d-6f91-406a-b77f-9d814ade2efd.TABLE:LightCinema.public.Places" relationship="REFERENCES">
+      <point x="48.333333333333336" y="-55.5" />
+      <point x="8.085783768023724" y="241.68888183206082" />
+      <point x="-40.24754956530961" y="241.68888183206082" />
+      <point x="0.0" y="80.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.8664021164021165" showDependencies="false" x="351.5923358778613" y="145.8904085496152" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

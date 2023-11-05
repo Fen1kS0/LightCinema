@@ -3,7 +3,7 @@
 public sealed class Reservation
 {
     public required User User { get; set; }
-    public int UserId { get; set; }
+    public required string UserLogin { get; set; }
     
     public required Session Session { get; set; }
     public int SessionId { get; set; }

@@ -13,7 +13,7 @@ public class SessionTypeConfiguration : IEntityTypeConfiguration<Session>
 
         builder.HasOne(g => g.Movie)
             .WithMany(m => m.Sessions)
-            .HasForeignKey(s => s.Id)
+            .HasForeignKey(s => s.MovieId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }

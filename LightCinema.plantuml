@@ -1,0 +1,69 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Countries {
+   Name: varchar(100)
+   Id: integer
+}
+class CountryMovie {
+   CountriesId: integer
+   MoviesId: integer
+}
+class GenreMovie {
+   GenresId: integer
+   MoviesId: integer
+}
+class Genres {
+   Name: varchar(45)
+   Id: integer
+}
+class Movies {
+   Name: varchar(250)
+   Descriptions: text
+   Year: integer
+   AgeLimit: integer
+   PosterLink: text
+   ImageLink: text
+   Id: integer
+}
+class Places {
+   HallNumber: integer
+   RowNumber: integer
+   PlaceNumber: integer
+   IsIncreasedPrice: boolean
+   Id: integer
+}
+class Reservations {
+   UserLogin: text
+   SessionId: integer
+   PlaceId: integer
+}
+class Sessions {
+   MovieId: integer
+   Start: timestamp with time zone
+   HallNumber: integer
+   Price: integer
+   IncreasedPrice: integer
+   Id: integer
+}
+class Users {
+   Password: text
+   Login: text
+}
+class __EFMigrationsHistory {
+   ProductVersion: varchar(32)
+   MigrationId: varchar(150)
+}
+
+CountryMovie           -[#595959,plain]-^  Countries             : "CountriesId:Id"
+CountryMovie           -[#595959,plain]-^  Movies                : "MoviesId:Id"
+GenreMovie             -[#595959,plain]-^  Genres                : "GenresId:Id"
+GenreMovie             -[#595959,plain]-^  Movies                : "MoviesId:Id"
+Reservations           -[#595959,plain]-^  Places                : "PlaceId:Id"
+Reservations           -[#595959,plain]-^  Sessions              : "SessionId:Id"
+Reservations           -[#595959,plain]-^  Users                 : "UserLogin:Login"
+Sessions               -[#595959,plain]-^  Movies                : "MovieId:Id"
+@enduml
