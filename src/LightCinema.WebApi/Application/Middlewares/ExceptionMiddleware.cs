@@ -1,4 +1,4 @@
-﻿namespace LightCinema.Application.Middlewares;
+﻿namespace LightCinema.WebApi.Application.Middlewares;
 
 public class ExceptionMiddleware
 {

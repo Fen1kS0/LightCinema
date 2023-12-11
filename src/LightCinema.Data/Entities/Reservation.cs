@@ -2,12 +2,11 @@
 
 public sealed class Reservation
 {
-    public required User User { get; set; }
-    public required string UserLogin { get; set; }
-    
-    public required Session Session { get; set; }
+    public User User { get; set; } = null!;
+    public string UserLogin { get; set; }
+    public Session Session { get; set; } = null!;
     public int SessionId { get; set; }
     
-    public required Place Place { get; set; }
-    public int PlaceId { get; set; }
+    public Seat Seat { get; set; } = null!;
+    public int SeatId { get; set; }
 }

@@ -8,12 +8,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LightCinema.BL\LightCinema.BL.csproj" />
+      <ProjectReference Include="..\LightCinema.Data\LightCinema.Data.csproj" />
     </ItemGroup>
 
 </Project>

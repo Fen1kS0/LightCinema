@@ -9,7 +9,7 @@ public class ReservationTypeConfiguration : IEntityTypeConfiguration<Reservation
     public void Configure(EntityTypeBuilder<Reservation> builder)
     {
         builder.ToTable("Reservations");
-        builder.HasKey(r => new { r.SessionId, r.UserLogin, r.PlaceId });
+        builder.HasKey(r => new { r.SessionId, r.UserLogin, PlaceId = r.SeatId });
         
         builder.HasOne(r => r.Session)
             .WithMany(s => s.Reservations)
@@ -23,9 +23,9 @@ public class ReservationTypeConfiguration : IEntityTypeConfiguration<Reservation
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
         
-        builder.HasOne(r => r.Place)
+        builder.HasOne(r => r.Seat)
             .WithMany(p => p.Reservations)
-            .HasForeignKey(r => r.PlaceId)
+            .HasForeignKey(r => r.SeatId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }

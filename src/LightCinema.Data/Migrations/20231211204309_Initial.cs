@@ -57,19 +57,19 @@ namespace LightCinema.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Places",
+                name: "Seats",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    HallNumber = table.Column<int>(type: "integer", nullable: false),
-                    RowNumber = table.Column<int>(type: "integer", nullable: false),
-                    PlaceNumber = table.Column<int>(type: "integer", nullable: false),
+                    Hall = table.Column<int>(type: "integer", nullable: false),
+                    Row = table.Column<int>(type: "integer", nullable: false),
+                    Number = table.Column<int>(type: "integer", nullable: false),
                     IsIncreasedPrice = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Places", x => x.Id);
+                    table.PrimaryKey("PK_Seats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +77,9 @@ namespace LightCinema.Data.Migrations
                 columns: table => new
                 {
                     Login = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false)
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -139,8 +141,8 @@ namespace LightCinema.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MovieId = table.Column<int>(type: "integer", nullable: false),
-                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    HallNumber = table.Column<int>(type: "integer", nullable: false),
+                    Start = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Hall = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: false),
                     IncreasedPrice = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -161,15 +163,15 @@ namespace LightCinema.Data.Migrations
                 {
                     UserLogin = table.Column<string>(type: "text", nullable: false),
                     SessionId = table.Column<int>(type: "integer", nullable: false),
-                    PlaceId = table.Column<int>(type: "integer", nullable: false)
+                    SeatId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservations", x => new { x.SessionId, x.UserLogin, x.PlaceId });
+                    table.PrimaryKey("PK_Reservations", x => new { x.SessionId, x.UserLogin, x.SeatId });
                     table.ForeignKey(
-                        name: "FK_Reservations_Places_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Places",
+                        name: "FK_Reservations_Seats_SeatId",
+                        column: x => x.SeatId,
+                        principalTable: "Seats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -197,9 +199,9 @@ namespace LightCinema.Data.Migrations
                 column: "MoviesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_PlaceId",
+                name: "IX_Reservations_SeatId",
                 table: "Reservations",
-                column: "PlaceId");
+                column: "SeatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_UserLogin",
@@ -231,7 +233,7 @@ namespace LightCinema.Data.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Places");
+                name: "Seats");
 
             migrationBuilder.DropTable(
                 name: "Sessions");

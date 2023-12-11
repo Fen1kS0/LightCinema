@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LightCinema.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231105114108_Initial")]
+    [Migration("20231211204309_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -129,31 +129,6 @@ namespace LightCinema.Data.Migrations
                     b.ToTable("Movies", (string)null);
                 });
 
-            modelBuilder.Entity("LightCinema.Data.Entities.Place", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("HallNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsIncreasedPrice")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("PlaceNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RowNumber")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Places", (string)null);
-                });
-
             modelBuilder.Entity("LightCinema.Data.Entities.Reservation", b =>
                 {
                     b.Property<int>("SessionId")
@@ -162,16 +137,41 @@ namespace LightCinema.Data.Migrations
                     b.Property<string>("UserLogin")
                         .HasColumnType("text");
 
-                    b.Property<int>("PlaceId")
+                    b.Property<int>("SeatId")
                         .HasColumnType("integer");
 
-                    b.HasKey("SessionId", "UserLogin", "PlaceId");
+                    b.HasKey("SessionId", "UserLogin", "SeatId");
 
-                    b.HasIndex("PlaceId");
+                    b.HasIndex("SeatId");
 
                     b.HasIndex("UserLogin");
 
                     b.ToTable("Reservations", (string)null);
+                });
+
+            modelBuilder.Entity("LightCinema.Data.Entities.Seat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Hall")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsIncreasedPrice")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Row")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Session", b =>
@@ -182,7 +182,7 @@ namespace LightCinema.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("HallNumber")
+                    b.Property<int>("Hall")
                         .HasColumnType("integer");
 
                     b.Property<int>("IncreasedPrice")
@@ -194,7 +194,7 @@ namespace LightCinema.Data.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Start")
+                    b.Property<DateTimeOffset>("Start")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -212,6 +212,12 @@ namespace LightCinema.Data.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Login");
 
@@ -250,9 +256,9 @@ namespace LightCinema.Data.Migrations
 
             modelBuilder.Entity("LightCinema.Data.Entities.Reservation", b =>
                 {
-                    b.HasOne("LightCinema.Data.Entities.Place", "Place")
+                    b.HasOne("LightCinema.Data.Entities.Seat", "Seat")
                         .WithMany("Reservations")
-                        .HasForeignKey("PlaceId")
+                        .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -268,7 +274,7 @@ namespace LightCinema.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Place");
+                    b.Navigation("Seat");
 
                     b.Navigation("Session");
 
@@ -291,7 +297,7 @@ namespace LightCinema.Data.Migrations
                     b.Navigation("Sessions");
                 });
 
-            modelBuilder.Entity("LightCinema.Data.Entities.Place", b =>
+            modelBuilder.Entity("LightCinema.Data.Entities.Seat", b =>
                 {
                     b.Navigation("Reservations");
                 });

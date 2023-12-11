@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LightCinema.Data.TypeConfigurations;
 
-public class PlaceTypeConfiguration : IEntityTypeConfiguration<Place>
+public class SeatTypeConfiguration : IEntityTypeConfiguration<Seat>
 {
-    public void Configure(EntityTypeBuilder<Place> builder)
+    public void Configure(EntityTypeBuilder<Seat> builder)
     {
-        builder.ToTable("Places");
+        builder.ToTable("Seats");
         builder.HasKey(c => c.Id);
     }
 }
