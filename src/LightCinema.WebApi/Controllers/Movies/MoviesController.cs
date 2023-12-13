@@ -25,10 +25,8 @@ public class MoviesController : BaseController
         var now = DateTimeOffset.UtcNow.AddHours(4);
         var (start, end) = dateType switch
         {
-            DateType.Today => (new DateTime(now.Year, now.Month, now.Day),
-                new DateTime(now.Year, now.Month, now.Day + 1)),
-            DateType.Tomorrow => (new DateTime(now.Year, now.Month, now.Day + 1),
-                new DateTime(now.Year, now.Month, now.Day + 2)),
+            DateType.Today => (now.DateTime, new DateTime(now.Year, now.Month, now.Day + 1)),
+            DateType.Tomorrow => (new DateTime(now.Year, now.Month, now.Day + 1), new DateTime(now.Year, now.Month, now.Day + 2)),
             DateType.Soon => (new DateTime(now.Year, now.Month, now.Day + 2), DateTime.MaxValue),
             _ => throw new ArgumentOutOfRangeException(nameof(dateType), dateType, "DateType not found")
         };
@@ -43,7 +41,7 @@ public class MoviesController : BaseController
             .Include(x => x.Sessions)
             .Where(x => x.Sessions.Any(s => startOffset < s.Start && s.Start < endOffset));
 
-        var movies = await query.Select(x => new GetMovieDto()
+        var movies = await query.Select(x => new GetMovieDto
         {
             Id = x.Id,
             Name = x.Name,
@@ -68,7 +66,7 @@ public class MoviesController : BaseController
             }
         }
 
-        return Ok(new GetMoviesResponse()
+        return Ok(new GetMoviesResponse
         {
             Movies = movies
         });
@@ -79,14 +77,13 @@ public class MoviesController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<GetMoviesResponse>> GetMoviesById([FromRoute] int id)
     {
-
         var movie = await _dbContext.Movies
             .AsSingleQuery()
             .AsNoTracking()
             .Include(x => x.Genres)
             .Include(x => x.Sessions)
             .Where(x => x.Id == id)
-            .Select(x => new GetMovieByIdResponse()
+            .Select(x => new GetMovieByIdResponse
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -97,15 +94,16 @@ public class MoviesController : BaseController
                 Countries = x.Countries.Select(c => c.Name),
                 Genres = x.Genres.Select(g => g.Name),
                 Sessions = x.Sessions
+                    .Where(s => s.Start > DateTimeOffset.UtcNow.AddHours(4))
                     .OrderBy(s => s.Start)
-                    .Select(s => new GetMovieByIdSessionDto()
+                    .Select(s => new GetMovieByIdSessionDto
                     {
                         Id = s.Id,
                         MinPrice = s.Price,
                         DateTime = s.Start.ToString("yyyy-MM-dd HH:mm")
                     })
             })
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
         
         return Ok(movie);
     }

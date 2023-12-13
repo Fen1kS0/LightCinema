@@ -1,4 +1,4 @@
-﻿namespace LightCinema.WebApi.Controllers.Users;
+﻿namespace LightCinema.WebApi.Controllers.Users.DTO;
 
 public sealed class ProfileResponse
 {
@@ -16,4 +16,5 @@ public sealed class ReservationProfile
     public required int Row { get; set; }
     public required int Number { get; set; }
     public required string DateTime { get; set; }
+    public required bool CanUnreserve { get; set; }
 }

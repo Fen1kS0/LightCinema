@@ -26,7 +26,7 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Id == id)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         if (session is null)
         {
@@ -40,7 +40,7 @@ public class SessionsController : BaseController
             .Select(x => x.SeatId)
             .ToListAsync();
 
-        var seats = await _dbContext.Places
+        var seats = await _dbContext.Seats
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Hall == session.Hall)
@@ -70,9 +70,9 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Id == id)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
-        if (session is null)
+        if (session is null || session.Start < DateTimeOffset.Now)
         {
             throw new NotFoundException("Сессия не найдена");
         }
@@ -110,19 +110,19 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Id == id)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
-        if (session is null)
+        if (session is null || session.Start < DateTimeOffset.Now)
         {
             throw new NotFoundException("Сессия не найдена");
         }
 
         var reservations = await _dbContext.Reservations
             .AsSingleQuery()
-            .Where(x => x.UserLogin == UserLogin! && x.SessionId == id && request.Seats.Contains(x.SeatId))
-            .ToListAsync();
+            .Where(x => x.UserLogin == UserLogin! && x.SessionId == id && x.SeatId == request.SeatId)
+            .FirstOrDefaultAsync();
 
-        if (request.Seats.Count != reservations.Count)
+        if (reservations is null)
         {
             throw new BusinessException("Бронь снять не возможно, т.к. она уже снята");
         }

@@ -34,7 +34,7 @@ public class UsersController : BaseController
         var user = await _dbContext.Users
             .AsNoTracking()
             .Include(x => x.Reservations)
-            .SingleOrDefaultAsync(x => x.Login == login);
+            .FirstOrDefaultAsync(x => x.Login == login);
 
         if (user is null)
         {
@@ -53,7 +53,16 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<AuthResponse>> LoginUser([FromBody] UserLoginRequest userLoginRequest)
     {
-        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == userLoginRequest.Login);
+        try
+        {
+            return Ok(GetAdminCredentials(userLoginRequest.Login, userLoginRequest.Password));
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == userLoginRequest.Login);
 
         if (user is null)
         {
@@ -77,7 +86,9 @@ public class UsersController : BaseController
         return Ok(new AuthResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            Login = user.Login,
+            Role = RoleNames.Visitor
         });
     }
     
@@ -86,9 +97,14 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<AuthResponse>> RegisterUser([FromBody] UserRegisterRequest userRegisterRequest)
     {
+        if (userRegisterRequest.Login == "admin")
+        {
+            throw new BusinessException("Админ не может быть зарегистрирован");
+        }
+        
         var existsUser = await _dbContext.Users
             .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Login == userRegisterRequest.Login);
+            .FirstOrDefaultAsync(x => x.Login == userRegisterRequest.Login);
 
         if (existsUser is not null)
         {
@@ -114,7 +130,9 @@ public class UsersController : BaseController
         return Ok(new AuthResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            Login = user.Login,
+            Role = RoleNames.Visitor
         });
     }
     
@@ -125,8 +143,13 @@ public class UsersController : BaseController
     {
         var principal = _jwtService.GetPrincipalFromExpiredToken(refreshRequest.AccessToken);
         var userLogin = principal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        
+        if (userLogin == "admin")
+        {
+            throw new BusinessException("Админ не может обновить токен");
+        }
 
-        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == userLogin);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == userLogin);
 
         if (user is null || user.RefreshToken != refreshRequest.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
         {
@@ -143,7 +166,9 @@ public class UsersController : BaseController
         return Ok(new AuthResponse
         {
             AccessToken = newAccessToken,
-            RefreshToken = newRefreshToken
+            RefreshToken = newRefreshToken,
+            Login = user.Login,
+            Role = RoleNames.Visitor
         });
     }
     
@@ -151,7 +176,12 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> RevokeToken()
     {
-        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == UserLogin);
+        if (IsAdmin)
+        {
+            throw new BusinessException("Админ не может сделать revoke");
+        }
+        
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == UserLogin);
 
         if (user is null)
         {
@@ -169,10 +199,15 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfile()
     {
+        if (IsAdmin)
+        {
+            throw new BusinessException("У админа нет профиля");
+        }
+        
         var user = await _dbContext.Users
             .AsNoTracking()
             .AsSingleQuery()
-            .SingleOrDefaultAsync(x => x.Login == UserLogin);
+            .FirstOrDefaultAsync(x => x.Login == UserLogin);
 
         if (user is null)
         {
@@ -186,6 +221,7 @@ public class UsersController : BaseController
             .ThenInclude(x => x.Movie)
             .Include(x => x.Seat)
             .Where(x => x.UserLogin == UserLogin)
+            .OrderByDescending(x => x.Session.Start)
             .Select(x => new ReservationProfile
             {
                 SessionId = x.SessionId,
@@ -195,6 +231,7 @@ public class UsersController : BaseController
                 Hall = x.Seat.Hall,
                 Row = x.Seat.Row,
                 Number = x.Seat.Number,
+                CanUnreserve = x.Session.Start > DateTimeOffset.UtcNow.AddHours(4)
             })
             .ToListAsync();
         
@@ -203,6 +240,29 @@ public class UsersController : BaseController
             Login = user.Login,
             Reserves = reservations
         });
+    }
+
+    private AuthResponse GetAdminCredentials(string login, string password)
+    {
+        if (login != "admin" || password != "password")
+        {
+            throw new NotFoundException("Пользователь не найден");
+        }
+
+        var accessToken = _jwtService.GenerateAccessToken( new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(ClaimTypes.NameIdentifier, login),
+            new(ClaimTypes.Role, RoleNames.Admin)
+        });
+        
+        return new AuthResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = string.Empty,
+            Login = login,
+            Role = RoleNames.Admin
+        };
     }
     
     private IEnumerable<Claim> GenerateUserClaims(User user)
