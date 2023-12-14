@@ -49,12 +49,12 @@ public static class AuthDependencyInjection
         {
             options.AddPolicy(PolicyNames.RequireAdministratorRole, policy =>
             {
-                policy.RequireClaim(ClaimTypes.Role, RoleNames.Visitor, RoleNames.Admin);
+                policy.RequireClaim(ClaimTypes.Role, RoleNames.Admin);
             });
                 
             options.AddPolicy(PolicyNames.RequireVisitorRole, policy =>
             {
-                policy.RequireClaim(ClaimTypes.Role, RoleNames.Visitor);
+                policy.RequireClaim(ClaimTypes.Role, RoleNames.Visitor, RoleNames.Admin);
             });
         });
         

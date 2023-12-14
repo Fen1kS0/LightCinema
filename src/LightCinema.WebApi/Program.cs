@@ -45,7 +45,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await SeedData.Seed(new ApplicationDbContext());
+    var dbContext = new ApplicationDbContext();
+    dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
+    await SeedData.Seed(dbContext);
 }
 
 app.UseCors(configurePolicy => configurePolicy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());

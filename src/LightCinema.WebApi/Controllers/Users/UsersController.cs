@@ -195,7 +195,7 @@ public class UsersController : BaseController
         return Accepted();
     }
     
-    [HttpPost("profile")]
+    [HttpGet("profile")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfile()
     {
@@ -231,7 +231,7 @@ public class UsersController : BaseController
                 Hall = x.Seat.Hall,
                 Row = x.Seat.Row,
                 Number = x.Seat.Number,
-                CanUnreserve = x.Session.Start > DateTimeOffset.UtcNow.AddHours(4)
+                CanUnreserve = x.Session.Start > DateTimeOffset.UtcNow
             })
             .ToListAsync();
         
@@ -244,7 +244,7 @@ public class UsersController : BaseController
 
     private AuthResponse GetAdminCredentials(string login, string password)
     {
-        if (login != "admin" || password != "password")
+        if (login != "admin" || password != "admin")
         {
             throw new NotFoundException("Пользователь не найден");
         }

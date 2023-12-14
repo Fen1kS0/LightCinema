@@ -2,7 +2,6 @@
 using LightCinema.Data.Entities;
 using LightCinema.WebApi.Application.Exceptions;
 using LightCinema.WebApi.Controllers.Sessions.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +16,54 @@ public class SessionsController : BaseController
         _dbContext = dbContext;
     }
 
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<GetSessionByIdResponse>> GetSessionById([FromRoute] int id)
+    {
+        var session = await _dbContext.Sessions
+            .AsNoTracking()
+            .AsSingleQuery()
+            .Include(x => x.Movie)
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (session is null)
+        {
+            throw new NotFoundException("Сессия не найдена");
+        }
+
+        var dateTime = session.Start.UtcDateTime;
+        
+        var start = new DateTimeOffset(dateTime, TimeSpan.Zero);
+        if (start < DateTimeOffset.UtcNow)
+        {
+            start = DateTimeOffset.UtcNow;
+        }
+        
+        var end = new DateTimeOffset(new DateTime(dateTime.Year, dateTime.Month, dateTime.Day + 1), TimeSpan.Zero);
+        
+        var otherSessions = await _dbContext.Sessions
+            .AsNoTracking()
+            .AsSingleQuery()
+            .Where(x => x.MovieId == session.MovieId && start.AddHours(-4) < x.Start && x.Start < end.AddHours(-4))
+            .Select(x => new OtherSessionDto
+            {
+                Id = x.Id,
+                MinPrice = x.Price,
+                Time = x.Start.AddHours(4).ToString("HH:mm")
+            })
+            .ToListAsync();
+
+        return Ok(new GetSessionByIdResponse()
+        {
+            MovieId = session.MovieId,
+            MovieName = session.Movie.Name,
+            SessionsDate = session.Start.AddHours(4).ToString("yyyy-MM-dd"),
+            Sessions = otherSessions
+        });
+    }
+
     [HttpGet("{id}/seats")]
-    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<GetSeatsBySessionResponse>> GetSeatsBySession([FromRoute] int id)
     {
@@ -72,7 +117,7 @@ public class SessionsController : BaseController
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
-        if (session is null || session.Start < DateTimeOffset.Now)
+        if (session is null || session.Start < DateTimeOffset.UtcNow)
         {
             throw new NotFoundException("Сессия не найдена");
         }
@@ -112,7 +157,7 @@ public class SessionsController : BaseController
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
-        if (session is null || session.Start < DateTimeOffset.Now)
+        if (session is null || session.Start < DateTimeOffset.UtcNow)
         {
             throw new NotFoundException("Сессия не найдена");
         }

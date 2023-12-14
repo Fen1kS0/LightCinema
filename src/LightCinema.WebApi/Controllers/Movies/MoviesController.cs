@@ -1,6 +1,5 @@
 ﻿using LightCinema.Data;
 using LightCinema.WebApi.Controllers.Movies.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +15,12 @@ public class MoviesController : BaseController
     }
 
     [HttpGet]
-    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<GetMoviesResponse>> GetMovies(
         [FromQuery(Name = "date")] DateType dateType,
         [FromQuery(Name = "withSessions")] bool? withSessions = true)
     {
-        var now = DateTimeOffset.UtcNow.AddHours(4);
+        var now = DateTimeOffset.UtcNow;
         var (start, end) = dateType switch
         {
             DateType.Today => (now.DateTime, new DateTime(now.Year, now.Month, now.Day + 1)),
@@ -32,7 +30,7 @@ public class MoviesController : BaseController
         };
 
         var startOffset = new DateTimeOffset(start, TimeSpan.Zero);
-        var endOffset = new DateTimeOffset(end, TimeSpan.Zero);
+        var endOffset = new DateTimeOffset(end.AddHours(-4), TimeSpan.Zero);
 
         var query = _dbContext.Movies
             .AsSingleQuery()
@@ -54,11 +52,11 @@ public class MoviesController : BaseController
                 {
                     Id = s.Id,
                     MinPrice = s.Price,
-                    Time = s.Start.ToString("HH:mm")
+                    Time = s.Start.AddHours(4).ToString("HH:mm")
                 })
         }).ToListAsync();
 
-        if (withSessions is true)
+        if (withSessions is false)
         {
             foreach (var movie in movies)
             {
@@ -73,7 +71,6 @@ public class MoviesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<GetMoviesResponse>> GetMoviesById([FromRoute] int id)
     {
@@ -94,13 +91,13 @@ public class MoviesController : BaseController
                 Countries = x.Countries.Select(c => c.Name),
                 Genres = x.Genres.Select(g => g.Name),
                 Sessions = x.Sessions
-                    .Where(s => s.Start > DateTimeOffset.UtcNow.AddHours(4))
+                    .Where(s => s.Start > DateTimeOffset.UtcNow)
                     .OrderBy(s => s.Start)
                     .Select(s => new GetMovieByIdSessionDto
                     {
                         Id = s.Id,
                         MinPrice = s.Price,
-                        DateTime = s.Start.ToString("yyyy-MM-dd HH:mm")
+                        DateTime = s.Start.AddHours(4).ToString("yyyy-MM-dd HH:mm")
                     })
             })
             .FirstOrDefaultAsync();
