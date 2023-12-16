@@ -23,14 +23,20 @@ public class MoviesController : BaseController
         var now = DateTimeOffset.UtcNow;
         var (start, end) = dateType switch
         {
-            DateType.Today => (now.DateTime, new DateTime(now.Year, now.Month, now.Day + 1)),
-            DateType.Tomorrow => (new DateTime(now.Year, now.Month, now.Day + 1), new DateTime(now.Year, now.Month, now.Day + 2)),
-            DateType.Soon => (new DateTime(now.Year, now.Month, now.Day + 2), DateTime.MaxValue),
+            DateType.Today => (
+                now.DateTime,
+                new DateTime(now.Year, now.Month, now.Day + 1)),
+            DateType.Tomorrow => (
+                DateOnly.FromDateTime(now.UtcDateTime.AddDays(1)).ToDateTime(new TimeOnly()),
+                DateOnly.FromDateTime(now.UtcDateTime.AddDays(2)).ToDateTime(new TimeOnly())),
+            DateType.Soon => (
+                DateOnly.FromDateTime(now.UtcDateTime.AddDays(2)).ToDateTime(new TimeOnly()),
+                DateTime.MaxValue),
             _ => throw new ArgumentOutOfRangeException(nameof(dateType), dateType, "DateType not found")
         };
 
-        var startOffset = new DateTimeOffset(start, TimeSpan.Zero);
-        var endOffset = new DateTimeOffset(end, TimeSpan.Zero);
+        var startOffset = new DateTimeOffset(start.AddHours(-4), TimeSpan.Zero);
+        var endOffset = new DateTimeOffset(end.AddHours(-4), TimeSpan.Zero);
 
         var query = _dbContext.Movies
             .AsSingleQuery()

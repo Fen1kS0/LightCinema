@@ -171,7 +171,7 @@ public static class SeedData
             new()
             {
                 Movie = movies[1],
-                Hall = 0,
+                Hall = 1,
                 Price = 1,
                 IncreasedPrice = 99999,
                 Start = DateTimeOffset.UtcNow.AddDays(15)
