@@ -40,7 +40,7 @@ public class SessionsController : BaseController
             start = DateTimeOffset.UtcNow;
         }
         
-        var end = new DateTimeOffset(new DateTime(dateTime.Year, dateTime.Month, dateTime.Day + 1), TimeSpan.Zero);
+        var end = new DateTimeOffset(DateOnly.FromDateTime(start.UtcDateTime).AddDays(1).ToDateTime(new TimeOnly()), TimeSpan.Zero);
         
         var otherSessions = await _dbContext.Sessions
             .AsNoTracking()

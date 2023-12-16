@@ -118,7 +118,7 @@ public static class SeedData
                 Hall = 1,
                 Price = 1000,
                 IncreasedPrice = 99999,
-                Start = DateTimeOffset.UtcNow.AddHours(1)
+                Start = DateTimeOffset.UtcNow.AddMinutes(10)
             },
             new()
             {
@@ -126,7 +126,7 @@ public static class SeedData
                 Hall = 2,
                 Price = 1000,
                 IncreasedPrice = 99999,
-                Start = DateTimeOffset.UtcNow.AddHours(1).AddMinutes(5)
+                Start = DateTimeOffset.UtcNow.AddMinutes(30)
             },
             new()
             {
