@@ -227,7 +227,7 @@ public class UsersController : BaseController
                 SessionId = x.SessionId,
                 SeatId = x.SeatId,
                 MovieName = x.Session.Movie.Name,
-                DateTime = x.Session.Start.ToString("yyyy-MM-dd HH:mm"),
+                DateTime = x.Session.Start.AddHours(4).ToString("yyyy-MM-dd HH:mm"),
                 Hall = x.Seat.Hall,
                 Row = x.Seat.Row,
                 Number = x.Seat.Number,

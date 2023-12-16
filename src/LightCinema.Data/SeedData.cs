@@ -6,8 +6,6 @@ public static class SeedData
 {
     public static async Task Seed(ApplicationDbContext dbContext)
     {
-        var random = new Random();
-
         var users = new List<User>
         {
             new()
@@ -22,25 +20,34 @@ public static class SeedData
             }
         };
 
-        var hallCount = 2;
-        var seatRows = 5;
-        var seatNumbers = 5;
-        var seats = new List<Seat>(hallCount * seatRows * seatNumbers);
 
-        for (var i = 0; i < hallCount; i++)
+        var seats = new List<Seat>();
+
+        for (var j = 1; j <= 10; j++)
         {
-            for (var j = 0; j < seatRows; j++)
+            for (var k = 1; k <= 10; k++)
             {
-                for (var k = 0; k < seatNumbers; k++)
+                seats.Add(new Seat
                 {
-                    seats.Add(new Seat
-                    {
-                        Hall = i,
-                        Row = j,
-                        Number = k,
-                        IsIncreasedPrice = j == seatRows - 1
-                    });
-                }
+                    Hall = 1,
+                    Row = j,
+                    Number = k,
+                    IsIncreasedPrice = j == 10
+                });
+            }
+        }
+        
+        for (var j = 1; j <= 5; j++)
+        {
+            for (var k = 1; k <= 5; k++)
+            {
+                seats.Add(new Seat
+                {
+                    Hall = 2,
+                    Row = j,
+                    Number = k,
+                    IsIncreasedPrice = j == 1
+                });
             }
         }
 
@@ -59,7 +66,8 @@ public static class SeedData
             new() { Name = "драма" },
             new() { Name = "триллер" },
             new() { Name = "ужасы" },
-            new() { Name = "романтика" }
+            new() { Name = "романтика" },
+            new() { Name = "биография" },
         };
 
         var movies = new List<Movie>
@@ -74,7 +82,7 @@ public static class SeedData
                 Year = 2011,
                 AgeLimit = 16,
                 PosterLink = "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/66b27e0c-9f85-424c-bfb0-415bd8475bc8/1920x",
-                ImageLink = "https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/af69a221-5921-4186-b700-2197d39e8362/1920x",
+                ImageLink = "https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/af69a221-5921-4186-b700-2197d39e8362/1920x"
             },
             new()
             {
@@ -84,9 +92,21 @@ public static class SeedData
                 Genres = new List<Genre> { genres[2], genres[3] },
                 Countries = new List<Country> { countries[0] },
                 Year = 1999,
-                AgeLimit = 16,
+                AgeLimit = 18,
                 PosterLink = "https://upload.wikimedia.org/wikipedia/ru/3/34/%D0%97%D0%B5%D0%BB%D1%91%D0%BD%D1%8B%D0%B9_%D1%81%D0%BB%D0%BE%D0%BD%D0%B8%D0%BA.jpg",
-                ImageLink = "https://zen4tech.files.wordpress.com/2013/03/exmyzm2vbl8.jpg",
+                ImageLink = "https://zen4tech.files.wordpress.com/2013/03/exmyzm2vbl8.jpg"
+            },
+            new()
+            {
+                Name = "Оппенгеймер",
+                Descriptions =
+                    "Два младших офицера, сидя в одной камере на гауптвахте, вынуждены решать острые социальные и психологические вопросы в небольшом пространстве.",
+                Genres = new List<Genre> { genres[2], genres[5] },
+                Countries = new List<Country> { countries[1], countries[2] },
+                Year = 2023,
+                AgeLimit = 18,
+                PosterLink = "https://www.kino-teatr.ru/movie/poster/154859/127109.jpg",
+                ImageLink = "https://kinoscan.com/?seraph_accel_gci=wp-content%2Fuploads%2F2023%2F08%2Ffvmexlix0aid7ek-1536x864.jpg&n=FyYFiiJSMrwzLDyCgJIz0Q"
             }
         };
 
@@ -94,15 +114,31 @@ public static class SeedData
         {
             new()
             {
-                Movie = movies[1],
-                Hall = 0,
+                Movie = movies[2],
+                Hall = 1,
                 Price = 1000,
                 IncreasedPrice = 99999,
                 Start = DateTimeOffset.UtcNow.AddHours(1)
             },
             new()
             {
-                Movie = movies[1],
+                Movie = movies[2],
+                Hall = 2,
+                Price = 1000,
+                IncreasedPrice = 99999,
+                Start = DateTimeOffset.UtcNow.AddHours(1).AddMinutes(5)
+            },
+            new()
+            {
+                Movie = movies[2],
+                Hall = 1,
+                Price = 1000,
+                IncreasedPrice = 99999,
+                Start = DateTimeOffset.UtcNow.AddHours(1).AddMinutes(15)
+            },
+            new()
+            {
+                Movie = movies[2],
                 Hall = 1,
                 Price = 1000,
                 IncreasedPrice = 99999,
@@ -110,8 +146,8 @@ public static class SeedData
             },
             new()
             {
-                Movie = movies[1],
-                Hall = 0,
+                Movie = movies[2],
+                Hall = 2,
                 Price = 1000,
                 IncreasedPrice = 99999,
                 Start = DateTimeOffset.UtcNow.AddDays(1)
@@ -135,7 +171,7 @@ public static class SeedData
             new()
             {
                 Movie = movies[1],
-                Hall = 1,
+                Hall = 0,
                 Price = 1,
                 IncreasedPrice = 99999,
                 Start = DateTimeOffset.UtcNow.AddDays(15)

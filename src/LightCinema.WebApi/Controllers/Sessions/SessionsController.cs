@@ -54,10 +54,11 @@ public class SessionsController : BaseController
             })
             .ToListAsync();
 
-        return Ok(new GetSessionByIdResponse()
+        return Ok(new GetSessionByIdResponse
         {
             MovieId = session.MovieId,
             MovieName = session.Movie.Name,
+            AgeLimit = session.Movie.AgeLimit,
             SessionsDate = session.Start.AddHours(4).ToString("yyyy-MM-dd"),
             Sessions = otherSessions
         });

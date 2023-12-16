@@ -5,6 +5,7 @@ public sealed class GetSessionByIdResponse
     public required int MovieId { get; set; }
     public required string MovieName { get; set; }
     public required string SessionsDate { get; set; }
+    public required int AgeLimit { get; set; }
     public required IEnumerable<OtherSessionDto> Sessions { get; set; }
 }
 
