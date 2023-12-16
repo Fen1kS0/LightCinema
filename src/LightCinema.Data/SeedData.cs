@@ -106,7 +106,7 @@ public static class SeedData
                 Year = 2023,
                 AgeLimit = 18,
                 PosterLink = "https://www.kino-teatr.ru/movie/poster/154859/127109.jpg",
-                ImageLink = "https://kinoscan.com/?seraph_accel_gci=wp-content%2Fuploads%2F2023%2F08%2Ffvmexlix0aid7ek-1536x864.jpg&n=FyYFiiJSMrwzLDyCgJIz0Q"
+                ImageLink = "https://i.ytimg.com/vi_webp/uYPbbksJxIg/maxresdefault.webp"
             }
         };
 

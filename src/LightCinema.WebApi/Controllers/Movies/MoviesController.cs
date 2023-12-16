@@ -30,7 +30,7 @@ public class MoviesController : BaseController
         };
 
         var startOffset = new DateTimeOffset(start, TimeSpan.Zero);
-        var endOffset = new DateTimeOffset(end.AddHours(-4), TimeSpan.Zero);
+        var endOffset = new DateTimeOffset(end, TimeSpan.Zero);
 
         var query = _dbContext.Movies
             .AsSingleQuery()
