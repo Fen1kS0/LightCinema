@@ -32,20 +32,20 @@ public class SessionsController : BaseController
             throw new NotFoundException("Сессия не найдена");
         }
 
-        var dateTime = session.Start.UtcDateTime;
+        var sessionDateTime = session.Start.UtcDateTime.AddHours(4);
         
-        var start = new DateTimeOffset(dateTime, TimeSpan.Zero);
+        var start = new DateTimeOffset(DateOnly.FromDateTime(sessionDateTime).ToDateTime(new TimeOnly()).AddHours(-4), TimeSpan.Zero);
         if (start < DateTimeOffset.UtcNow)
         {
             start = DateTimeOffset.UtcNow;
         }
         
-        var end = new DateTimeOffset(DateOnly.FromDateTime(start.UtcDateTime).AddDays(1).ToDateTime(new TimeOnly()), TimeSpan.Zero);
+        var end = new DateTimeOffset(DateOnly.FromDateTime(sessionDateTime.AddDays(1)).ToDateTime(new TimeOnly()).AddHours(-4), TimeSpan.Zero);
         
         var otherSessions = await _dbContext.Sessions
             .AsNoTracking()
             .AsSingleQuery()
-            .Where(x => x.MovieId == session.MovieId && start.AddHours(-4) < x.Start && x.Start < end.AddHours(-4))
+            .Where(x => x.MovieId == session.MovieId && start < x.Start && x.Start < end)
             .Select(x => new OtherSessionDto
             {
                 Id = x.Id,
