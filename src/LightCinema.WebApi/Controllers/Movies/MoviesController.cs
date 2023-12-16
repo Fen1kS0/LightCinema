@@ -85,7 +85,7 @@ public class MoviesController : BaseController
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Descriptions,
-                ImageLink = x.PosterLink,
+                ImageLink = x.ImageLink,
                 CreatedYear = x.Year,
                 AgeLimit = x.AgeLimit,
                 Countries = x.Countries.Select(c => c.Name),
