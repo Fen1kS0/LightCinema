@@ -8,8 +8,9 @@ public class GetMovieByIdResponse
     public required int CreatedYear { get; set; }
     public required int AgeLimit { get; set; }
     public required string ImageLink { get; set; }
-    public required IEnumerable<string> Countries { get; set; }
-    public required IEnumerable<string> Genres { get; set; }
+    public required string PosterLink { get; set; }
+    public required IEnumerable<GetCountryDto> Countries { get; set; }
+    public required IEnumerable<GetGenreDto> Genres { get; set; }
     public required IEnumerable<GetMovieByIdSessionDto> Sessions { get; set; }
 }
 

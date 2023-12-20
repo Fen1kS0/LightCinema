@@ -34,7 +34,7 @@ public class UsersController : BaseController
         var user = await _dbContext.Users
             .AsNoTracking()
             .Include(x => x.Reservations)
-            .FirstOrDefaultAsync(x => x.Login == login);
+            .SingleOrDefaultAsync(x => x.Login == login);
 
         if (user is null)
         {
@@ -104,7 +104,7 @@ public class UsersController : BaseController
         
         var existsUser = await _dbContext.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Login == userRegisterRequest.Login);
+            .SingleOrDefaultAsync(x => x.Login == userRegisterRequest.Login);
 
         if (existsUser is not null)
         {
@@ -149,7 +149,7 @@ public class UsersController : BaseController
             throw new BusinessException("Админ не может обновить токен");
         }
 
-        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == userLogin);
+        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == userLogin);
 
         if (user is null || user.RefreshToken != refreshRequest.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
         {
@@ -207,7 +207,7 @@ public class UsersController : BaseController
         var user = await _dbContext.Users
             .AsNoTracking()
             .AsSingleQuery()
-            .FirstOrDefaultAsync(x => x.Login == UserLogin);
+            .SingleOrDefaultAsync(x => x.Login == UserLogin);
 
         if (user is null)
         {

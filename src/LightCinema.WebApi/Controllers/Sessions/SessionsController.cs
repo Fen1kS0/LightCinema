@@ -1,7 +1,9 @@
 ﻿using LightCinema.Data;
 using LightCinema.Data.Entities;
+using LightCinema.WebApi.Application.Auth;
 using LightCinema.WebApi.Application.Exceptions;
 using LightCinema.WebApi.Controllers.Sessions.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -116,7 +118,7 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Id == id)
-            .FirstOrDefaultAsync();
+            .SingleOrDefaultAsync();
 
         if (session is null || session.Start < DateTimeOffset.UtcNow)
         {
@@ -156,7 +158,7 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.Id == id)
-            .FirstOrDefaultAsync();
+            .SingleOrDefaultAsync();
 
         if (session is null || session.Start < DateTimeOffset.UtcNow)
         {
@@ -166,7 +168,7 @@ public class SessionsController : BaseController
         var reservations = await _dbContext.Reservations
             .AsSingleQuery()
             .Where(x => x.UserLogin == UserLogin! && x.SessionId == id && x.SeatId == request.SeatId)
-            .FirstOrDefaultAsync();
+            .SingleOrDefaultAsync();
 
         if (reservations is null)
         {
@@ -174,6 +176,83 @@ public class SessionsController : BaseController
         }
         
         _dbContext.Reservations.RemoveRange(reservations);
+        await _dbContext.SaveChangesAsync();
+        
+        return Ok();
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
+    public async Task<IActionResult> Create([FromBody] CreateSessionRequest request)
+    {
+        try
+        {
+            await _dbContext.Seats
+                .Select(x => x.Hall)
+                .SingleAsync(x => x == request.HallNumber);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new BusinessException("Такого зала не существует");
+        }
+
+        if (request.DateTime < DateTimeOffset.UtcNow)
+        {
+            throw new BusinessException("Время и дата в прошлом");
+        }
+
+        if (request.Price < 0)
+        {
+            throw new BusinessException("Цена на сеанс не может быть отрицательной");
+        }
+        
+        if (request.IncreasedPrice < request.Price)
+        {
+            throw new BusinessException("Vip цена должна быть больше обычной");
+        }
+
+        var movie = _dbContext.Movies
+            .AsNoTracking()
+            .AsSingleQuery()
+            .SingleOrDefaultAsync(x => x.Id == request.MovieId);
+
+        if (movie is null)
+        {
+            throw new BusinessException("Фильм не найден");
+        }
+
+        var session = new Session
+        {
+            MovieId = request.MovieId,
+            Hall = request.HallNumber,
+            Start = request.DateTime,
+            Price = request.Price,
+            IncreasedPrice = request.IncreasedPrice
+        };
+        
+        _dbContext.Sessions.Remove(session);
+        await _dbContext.SaveChangesAsync();
+        
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var session = await _dbContext.Sessions
+            .AsSingleQuery()
+            .SingleOrDefaultAsync(x => x.Id == id);
+
+        if (session is null)
+        {
+            throw new NotFoundException("Сессия не найдена");
+        }
+
+        _dbContext.Sessions.Remove(session);
         await _dbContext.SaveChangesAsync();
         
         return Ok();

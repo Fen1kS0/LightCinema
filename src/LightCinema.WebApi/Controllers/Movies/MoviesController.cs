@@ -1,5 +1,9 @@
 ﻿using LightCinema.Data;
+using LightCinema.Data.Entities;
+using LightCinema.WebApi.Application.Auth;
+using LightCinema.WebApi.Application.Exceptions;
 using LightCinema.WebApi.Controllers.Movies.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,7 +82,7 @@ public class MoviesController : BaseController
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<GetMoviesResponse>> GetMoviesById([FromRoute] int id)
+    public async Task<ActionResult<GetMovieByIdResponse>> GetMoviesById([FromRoute] int id)
     {
         var movie = await _dbContext.Movies
             .AsSingleQuery()
@@ -92,10 +96,19 @@ public class MoviesController : BaseController
                 Name = x.Name,
                 Description = x.Descriptions,
                 ImageLink = x.ImageLink,
+                PosterLink = x.PosterLink,
                 CreatedYear = x.Year,
                 AgeLimit = x.AgeLimit,
-                Countries = x.Countries.Select(c => c.Name),
-                Genres = x.Genres.Select(g => g.Name),
+                Countries = x.Countries.Select(c => new GetCountryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }),
+                Genres = x.Genres.Select(g => new GetGenreDto
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }),
                 Sessions = x.Sessions
                     .Where(s => s.Start > DateTimeOffset.UtcNow)
                     .OrderBy(s => s.Start)
@@ -106,8 +119,176 @@ public class MoviesController : BaseController
                         DateTime = s.Start.AddHours(4).ToString("yyyy-MM-dd HH:mm")
                     })
             })
-            .FirstOrDefaultAsync();
-        
+            .SingleOrDefaultAsync();
+
         return Ok(movie);
+    }
+
+    [HttpGet("genres")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<GetGenresResponse>> GetGenres()
+    {
+        var genres = await _dbContext.Genres
+            .AsNoTracking()
+            .AsSingleQuery()
+            .Select(x => new GetGenreDto
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync();
+
+        return Ok(new GetGenresResponse
+        {
+            Genres = genres
+        });
+    }
+
+    [HttpGet("countries")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<GetCountriesResponse>> GetCountries()
+    {
+        var countries = await _dbContext.Countries
+            .AsNoTracking()
+            .AsSingleQuery()
+            .Select(x => new GetCountryDto
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync();
+
+        return Ok(new GetCountriesResponse
+        {
+            Countries = countries
+        });
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
+    public async Task<IActionResult> CreateMovie([FromBody] CreateMovieRequest request)
+    {
+        if (request.Year > DateTimeOffset.UtcNow.Year)
+        {
+            throw new BusinessException("Год создания фильма не может быть в будущем");
+        }
+
+        if (request.AgeLimit is < 0 or > 18)
+        {
+            throw new BusinessException("Возрастное ограничение может быть от 0 до 18 лет");
+        }
+
+        var genres = await _dbContext.Genres
+            .AsSingleQuery()
+            .Where(x => request.Genres.Contains(x.Id))
+            .ToListAsync();
+
+        if (genres.Count != request.Genres.Count)
+        {
+            throw new NotFoundException("Найдены не все жанры");
+        }
+
+        var countries = await _dbContext.Countries
+            .AsSingleQuery()
+            .Where(x => request.Countries.Contains(x.Id))
+            .ToListAsync();
+
+        if (countries.Count != request.Countries.Count)
+        {
+            throw new NotFoundException("Найдены не все страны");
+        }
+
+        var movie = new Movie
+        {
+            Name = request.Name,
+            Descriptions = request.Descriptions,
+            Genres = genres,
+            Countries = countries,
+            Year = request.Year!.Value,
+            AgeLimit = request.AgeLimit!.Value,
+            PosterLink = request.PosterLink,
+            ImageLink = request.ImageLink
+        };
+
+        await _dbContext.Movies.AddAsync(movie);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
+    public async Task<IActionResult> UpdateMovie([FromRoute] int id, [FromBody] UpdateMovieRequest request)
+    {
+        var movie = await _dbContext.Movies.AsSingleQuery().SingleOrDefaultAsync(x => x.Id == id);
+
+        if (movie is null)
+        {
+            throw new BusinessException("Фильм не найден");
+        }
+        
+        if (request.Year > DateTimeOffset.UtcNow.Year)
+        {
+            throw new BusinessException("Год создания фильма не может быть в будущем");
+        }
+
+        if (request.AgeLimit is < 0 or > 18)
+        {
+            throw new BusinessException("Возрастное ограничение может быть от 0 до 18 лет");
+        }
+
+        var genres = await _dbContext.Genres
+            .AsSingleQuery()
+            .Where(x => request.Genres.Contains(x.Id))
+            .ToListAsync();
+
+        if (genres.Count != request.Genres.Count)
+        {
+            throw new NotFoundException("Найдены не все жанры");
+        }
+
+        var countries = await _dbContext.Countries
+            .AsSingleQuery()
+            .Where(x => request.Countries.Contains(x.Id))
+            .ToListAsync();
+
+        if (countries.Count != request.Countries.Count)
+        {
+            throw new NotFoundException("Найдены не все страны");
+        }
+        
+        movie.Name = request.Name;
+        movie.Descriptions = request.Descriptions;
+        movie.Genres = genres;
+        movie.Countries = countries;
+        movie.Year = request.Year!.Value;
+        movie.AgeLimit = request.AgeLimit!.Value;
+        movie.PosterLink = request.PosterLink;
+        movie.ImageLink = request.ImageLink;
+        
+        _dbContext.Movies.Update(movie);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
+    public async Task<IActionResult> DeleteMovie([FromRoute] int id)
+    {
+        var movie = await _dbContext.Movies.AsSingleQuery().SingleOrDefaultAsync(x => x.Id == id);
+
+        if (movie is null)
+        {
+            throw new BusinessException("Фильм не найден");
+        }
+
+        _dbContext.Movies.Remove(movie);
+        await _dbContext.SaveChangesAsync();
+        
+        return NoContent();
     }
 }
