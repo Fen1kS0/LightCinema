@@ -200,7 +200,7 @@ public class SessionsController : BaseController
 
         if (request.DateTime < DateTimeOffset.UtcNow)
         {
-            throw new BusinessException("Время и дата в прошлом");
+            throw new BusinessException("Время и дата не могут быть в прошлом");
         }
 
         if (request.Price < 0)
@@ -210,7 +210,7 @@ public class SessionsController : BaseController
         
         if (request.IncreasedPrice < request.Price)
         {
-            throw new BusinessException("Vip цена должна быть больше обычной");
+            throw new BusinessException("Повышенная цена должна быть больше обычной");
         }
 
         var movie = _dbContext.Movies

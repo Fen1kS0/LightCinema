@@ -99,7 +99,7 @@ public class UsersController : BaseController
     {
         if (userRegisterRequest.Login == "admin")
         {
-            throw new BusinessException("Админ не может быть зарегистрирован");
+            throw new BusinessException("Администратор не может быть зарегистрирован");
         }
         
         var existsUser = await _dbContext.Users
@@ -146,7 +146,7 @@ public class UsersController : BaseController
         
         if (userLogin == "admin")
         {
-            throw new BusinessException("Админ не может обновить токен");
+            throw new BusinessException("Администратор не может обновить токен");
         }
 
         var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == userLogin);
@@ -201,7 +201,7 @@ public class UsersController : BaseController
     {
         if (IsAdmin)
         {
-            throw new BusinessException("У админа нет профиля");
+            throw new BusinessException("У администратора нет профиля");
         }
         
         var user = await _dbContext.Users
