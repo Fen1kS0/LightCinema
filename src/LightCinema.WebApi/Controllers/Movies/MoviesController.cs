@@ -24,17 +24,17 @@ public class MoviesController : BaseController
         [FromQuery(Name = "date")] DateType dateType,
         [FromQuery(Name = "withSessions")] bool? withSessions = true)
     {
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTimeOffset.UtcNow.UtcDateTime.AddHours(4);
         var (start, end) = dateType switch
         {
             DateType.Today => (
-                now.DateTime,
-                new DateTime(now.Year, now.Month, now.Day + 1)),
+                now,
+                DateOnly.FromDateTime(now.AddDays(1)).ToDateTime(new TimeOnly())),
             DateType.Tomorrow => (
-                DateOnly.FromDateTime(now.UtcDateTime.AddDays(1)).ToDateTime(new TimeOnly()),
-                DateOnly.FromDateTime(now.UtcDateTime.AddDays(2)).ToDateTime(new TimeOnly())),
+                DateOnly.FromDateTime(now.AddDays(1)).ToDateTime(new TimeOnly()),
+                DateOnly.FromDateTime(now.AddDays(2)).ToDateTime(new TimeOnly())),
             DateType.Soon => (
-                DateOnly.FromDateTime(now.UtcDateTime.AddDays(2)).ToDateTime(new TimeOnly()),
+                DateOnly.FromDateTime(now.AddDays(2)).ToDateTime(new TimeOnly()),
                 DateTime.MaxValue),
             _ => throw new ArgumentOutOfRangeException(nameof(dateType), dateType, "DateType not found")
         };
