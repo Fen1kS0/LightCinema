@@ -222,7 +222,11 @@ public class MoviesController : BaseController
     [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
     public async Task<IActionResult> UpdateMovie([FromRoute] int id, [FromBody] UpdateMovieRequest request)
     {
-        var movie = await _dbContext.Movies.AsSingleQuery().SingleOrDefaultAsync(x => x.Id == id);
+        var movie = await _dbContext.Movies
+            .AsSingleQuery()
+            .Include(x => x.Genres)
+            .Include(x => x.Countries)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (movie is null)
         {
@@ -258,6 +262,11 @@ public class MoviesController : BaseController
         {
             throw new NotFoundException("Найдены не все страны");
         }
+
+        movie.Countries = new List<Country>();
+        movie.Genres = new List<Genre>();
+        _dbContext.Movies.Update(movie);
+        await _dbContext.SaveChangesAsync();
         
         movie.Name = request.Name;
         movie.Descriptions = request.Descriptions;
