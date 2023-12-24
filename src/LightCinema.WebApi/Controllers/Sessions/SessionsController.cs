@@ -198,7 +198,7 @@ public class SessionsController : BaseController
             throw new BusinessException("Такого зала не существует");
         }
 
-        if (request.DateTime < DateTimeOffset.UtcNow)
+        if (request.DateTime < DateTimeOffset.UtcNow.DateTime.AddHours(4))
         {
             throw new BusinessException("Время и дата не могут быть в прошлом");
         }
@@ -227,7 +227,7 @@ public class SessionsController : BaseController
         {
             MovieId = request.MovieId,
             Hall = request.HallNumber,
-            Start = request.DateTime,
+            Start = new DateTimeOffset(request.DateTime.AddHours(-4), TimeSpan.Zero),
             Price = request.Price,
             IncreasedPrice = request.IncreasedPrice
         };
