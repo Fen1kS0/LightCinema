@@ -93,6 +93,6 @@ public class HallsController : BaseController
         _dbContext.Sessions.RemoveRange(sessions);
         await _dbContext.SaveChangesAsync();
         
-        return NoContent();
+        return Ok();
     }
 }

@@ -298,6 +298,6 @@ public class MoviesController : BaseController
         _dbContext.Movies.Remove(movie);
         await _dbContext.SaveChangesAsync();
         
-        return NoContent();
+        return Ok();
     }
 }
