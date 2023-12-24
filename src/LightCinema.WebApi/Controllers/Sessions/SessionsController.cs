@@ -186,15 +186,12 @@ public class SessionsController : BaseController
     [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
     public async Task<IActionResult> Create([FromBody] CreateSessionRequest request)
     {
-        try
+        var seat = await _dbContext.Seats
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Hall == request.HallNumber);
+            
+        if (seat is null)
         {
-            await _dbContext.Seats
-                .Select(x => x.Hall)
-                .SingleAsync(x => x == request.HallNumber);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
             throw new BusinessException("Такого зала не существует");
         }
 
