@@ -229,7 +229,7 @@ public class SessionsController : BaseController
             IncreasedPrice = request.IncreasedPrice
         };
         
-        _dbContext.Sessions.Remove(session);
+        await _dbContext.Sessions.AddAsync(session);
         await _dbContext.SaveChangesAsync();
         
         return Ok();
