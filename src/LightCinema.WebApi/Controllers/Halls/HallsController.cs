@@ -71,7 +71,7 @@ public class HallsController : BaseController
         return Ok();
     }
 
-    [HttpPost("{number}")]
+    [HttpDelete("{number}")]
     public async Task<IActionResult> DeleteHall(int number)
     {
         var seats = await _dbContext.Seats
