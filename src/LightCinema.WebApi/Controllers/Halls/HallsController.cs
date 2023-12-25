@@ -26,6 +26,7 @@ public class HallsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .GroupBy(x => x.Hall)
+            .OrderBy(x => x.Key)
             .Select(x => new GetHallDto
             {
                 Number = x.Key,
