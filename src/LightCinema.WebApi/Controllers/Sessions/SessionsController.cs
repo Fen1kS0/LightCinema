@@ -221,6 +221,19 @@ public class SessionsController : BaseController
             throw new BusinessException("Фильм не найден");
         }
 
+        
+        var start = new DateTimeOffset(request.DateTime.AddHours(-4), TimeSpan.Zero);
+        
+        var sessionInHall = await _dbContext.Sessions
+            .AsNoTracking()
+            .AsSingleQuery()
+            .FirstOrDefaultAsync(x => x.Hall == request.HallNumber && start.AddHours(-2) <= x.Start && x.Start <= start.AddHours(2));
+
+        if (sessionInHall is not null)
+        {
+            throw new BusinessException("В данном зале, на текущее время уже существует сеанс");
+        }
+        
         var session = new Session
         {
             MovieId = request.MovieId,
