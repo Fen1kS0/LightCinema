@@ -34,7 +34,7 @@ public class MoviesController : BaseController
                 DateOnly.FromDateTime(now.AddDays(1)).ToDateTime(new TimeOnly()),
                 DateOnly.FromDateTime(now.AddDays(2)).ToDateTime(new TimeOnly())),
             DateType.Soon => (
-                DateOnly.FromDateTime(now.AddDays(2)).ToDateTime(new TimeOnly()),
+                DateTime.MinValue.AddHours(4),
                 DateTime.MaxValue),
             _ => throw new ArgumentOutOfRangeException(nameof(dateType), dateType, "DateType not found")
         };
@@ -48,16 +48,6 @@ public class MoviesController : BaseController
             .Include(x => x.Genres)
             .Include(x => x.Sessions)
             .Where(x => x.Sessions.Any(s => startOffset < s.Start && s.Start < endOffset));
-
-        if (dateType == DateType.Soon)
-        {
-            query = query.Union(_dbContext.Movies
-                .AsSingleQuery()
-                .AsNoTracking()
-                .Include(x => x.Genres)
-                .Include(x => x.Sessions)
-                .Where(x => x.Sessions.Count == 0));
-        }
 
         var movies = await query.Select(x => new GetMovieDto
         {
