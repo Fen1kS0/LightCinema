@@ -44,17 +44,14 @@ public class HallsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateHall([FromBody] CreateHallRequest request)
     {
-        try
+        var seat = await _dbContext.Seats
+            .AsNoTracking()
+            .AsSingleQuery()
+            .FirstOrDefaultAsync(x => x.Hall == request.Number);
+
+        if (seat is not null)
         {
-            await _dbContext.Seats
-                .Select(x => x.Hall)
-                .SingleAsync(x => x == request.Number);
-            
             throw new BusinessException("Такой зал уже создан");
-        }
-        catch (Exception)
-        {
-            // ignore
         }
         
         var seats = request.Seats.Select(x => new Seat
