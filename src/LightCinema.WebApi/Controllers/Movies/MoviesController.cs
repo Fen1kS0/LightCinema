@@ -49,6 +49,16 @@ public class MoviesController : BaseController
             .Include(x => x.Sessions)
             .Where(x => x.Sessions.Any(s => startOffset < s.Start && s.Start < endOffset));
 
+        if (dateType == DateType.Soon)
+        {
+            query = query.Union(_dbContext.Movies
+                .AsSingleQuery()
+                .AsNoTracking()
+                .Include(x => x.Genres)
+                .Include(x => x.Sessions)
+                .Where(x => x.Sessions.Count == 0));
+        }
+
         var movies = await query.Select(x => new GetMovieDto
         {
             Id = x.Id,
@@ -216,7 +226,7 @@ public class MoviesController : BaseController
 
         return Ok();
     }
-    
+
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [Authorize(Policy = PolicyNames.RequireAdministratorRole)]
@@ -232,7 +242,7 @@ public class MoviesController : BaseController
         {
             throw new BusinessException("Фильм не найден");
         }
-        
+
         if (request.Year > DateTimeOffset.UtcNow.Year)
         {
             throw new BusinessException("Год создания фильма не может быть в будущем");
@@ -267,7 +277,7 @@ public class MoviesController : BaseController
         movie.Genres = new List<Genre>();
         _dbContext.Movies.Update(movie);
         await _dbContext.SaveChangesAsync();
-        
+
         movie.Name = request.Name;
         movie.Descriptions = request.Descriptions;
         movie.Genres = genres;
@@ -276,7 +286,7 @@ public class MoviesController : BaseController
         movie.AgeLimit = request.AgeLimit!.Value;
         movie.PosterLink = request.PosterLink;
         movie.ImageLink = request.ImageLink;
-        
+
         _dbContext.Movies.Update(movie);
         await _dbContext.SaveChangesAsync();
 
@@ -297,7 +307,7 @@ public class MoviesController : BaseController
 
         _dbContext.Movies.Remove(movie);
         await _dbContext.SaveChangesAsync();
-        
+
         return Ok();
     }
 }
