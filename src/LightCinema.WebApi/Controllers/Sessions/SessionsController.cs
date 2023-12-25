@@ -210,7 +210,7 @@ public class SessionsController : BaseController
             throw new BusinessException("Повышенная цена должна быть больше обычной");
         }
 
-        var movie = _dbContext.Movies
+        var movie = await _dbContext.Movies
             .AsNoTracking()
             .AsSingleQuery()
             .SingleOrDefaultAsync(x => x.Id == request.MovieId);
