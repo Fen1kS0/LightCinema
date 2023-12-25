@@ -48,6 +48,7 @@ public class SessionsController : BaseController
             .AsNoTracking()
             .AsSingleQuery()
             .Where(x => x.MovieId == session.MovieId && start < x.Start && x.Start < end)
+            .OrderBy(x => x.Start)
             .Select(x => new OtherSessionDto
             {
                 Id = x.Id,
