@@ -220,7 +220,6 @@ public class SessionsController : BaseController
         {
             throw new BusinessException("Фильм не найден");
         }
-
         
         var start = new DateTimeOffset(request.DateTime.AddHours(-4), TimeSpan.Zero);
         
@@ -238,7 +237,7 @@ public class SessionsController : BaseController
         {
             MovieId = request.MovieId,
             Hall = request.HallNumber,
-            Start = new DateTimeOffset(request.DateTime.AddHours(-4), TimeSpan.Zero),
+            Start = start,
             Price = request.Price,
             IncreasedPrice = request.IncreasedPrice
         };
