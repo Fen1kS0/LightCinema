@@ -49,6 +49,16 @@ public class MoviesController : BaseController
             .Include(x => x.Sessions)
             .Where(x => x.Sessions.Any(s => startOffset < s.Start && s.Start < endOffset));
 
+        if (dateType == DateType.Soon)
+        {
+            query = query.Union(_dbContext.Movies
+                .AsSingleQuery()
+                .AsNoTracking()
+                .Include(x => x.Genres)
+                .Include(x => x.Sessions)
+                .Where(x => x.Sessions.Count == 0));
+        }
+
         var movies = await query.Select(x => new GetMovieDto
         {
             Id = x.Id,
