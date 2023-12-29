@@ -1,0 +1,16 @@
+@startuml
+class ApplicationDbContext {
+    + ApplicationDbContext()
+    + ApplicationDbContext(options:DbContextOptions<ApplicationDbContext>)
+}
+class "DbSet`1"<T> {
+}
+DbContext <|-- ApplicationDbContext
+ApplicationDbContext --> "Movies<Movie>" "DbSet`1"
+ApplicationDbContext --> "Seats<Seat>" "DbSet`1"
+ApplicationDbContext --> "Reservations<Reservation>" "DbSet`1"
+ApplicationDbContext --> "Sessions<Session>" "DbSet`1"
+ApplicationDbContext --> "Users<User>" "DbSet`1"
+ApplicationDbContext --> "Genres<Genre>" "DbSet`1"
+ApplicationDbContext --> "Countries<Country>" "DbSet`1"
+@enduml

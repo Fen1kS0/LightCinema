@@ -1,0 +1,8 @@
+@startuml
+class GenreTypeConfiguration {
+    + Configure(builder:EntityTypeBuilder<Genre>) : void
+}
+class "IEntityTypeConfiguration`1"<T> {
+}
+"IEntityTypeConfiguration`1" "<Genre>" <|-- GenreTypeConfiguration
+@enduml

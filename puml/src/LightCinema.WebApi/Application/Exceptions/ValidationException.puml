@@ -1,0 +1,6 @@
+@startuml
+class ValidationException <<sealed>> {
+    + ValidationException(message:string)
+}
+BaseException <|-- ValidationException
+@enduml

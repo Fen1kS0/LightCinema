@@ -1,0 +1,11 @@
+@startuml
+class User <<sealed>> {
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + RefreshToken : string? <<get>> <<set>>
+    + RefreshTokenExpiryTime : DateTime? <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+User o-> "Reservations<Reservation>" "ICollection`1"
+@enduml

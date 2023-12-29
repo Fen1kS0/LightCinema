@@ -1,0 +1,9 @@
+@startuml
+class ConfigureSwaggerOptions {
+    + Configure(options:SwaggerGenOptions) : void
+    + Configure(name:string, options:SwaggerGenOptions) : void
+}
+class "IConfigureNamedOptions`1"<T> {
+}
+"IConfigureNamedOptions`1" "<SwaggerGenOptions>" <|-- ConfigureSwaggerOptions
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+class UsersController {
+    + UsersController(dbContext:ApplicationDbContext, jwtService:JwtService, jwtConfig:JwtConfig)
+    + <<async>> GetUserById(login:string) : Task<IActionResult>
+    + <<async>> LoginUser(userLoginRequest:UserLoginRequest) : Task<ActionResult<AuthResponse>>
+    + <<async>> RegisterUser(userRegisterRequest:UserRegisterRequest) : Task<ActionResult<AuthResponse>>
+    + <<async>> RefreshToken(refreshRequest:RefreshRequest) : Task<ActionResult<AuthResponse>>
+    + <<async>> RevokeToken() : Task<IActionResult>
+    + <<async>> GetProfile() : Task<IActionResult>
+}
+BaseController <|-- UsersController
+@enduml

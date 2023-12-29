@@ -1,0 +1,7 @@
+@startuml
+class ReserveRequest <<sealed>> {
+}
+class "IEnumerable`1"<T> {
+}
+ReserveRequest --> "Seats<int>" "IEnumerable`1"
+@enduml

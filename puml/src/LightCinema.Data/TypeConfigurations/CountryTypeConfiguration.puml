@@ -1,0 +1,8 @@
+@startuml
+class CountryTypeConfiguration {
+    + Configure(builder:EntityTypeBuilder<Country>) : void
+}
+class "IEntityTypeConfiguration`1"<T> {
+}
+"IEntityTypeConfiguration`1" "<Country>" <|-- CountryTypeConfiguration
+@enduml

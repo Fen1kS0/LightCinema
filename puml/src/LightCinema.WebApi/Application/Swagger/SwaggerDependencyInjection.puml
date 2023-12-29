@@ -1,0 +1,5 @@
+@startuml
+class SwaggerDependencyInjection <<static>> {
+    + {static} AddCustomSwaggerGen(services:IServiceCollection) : IServiceCollection
+}
+@enduml

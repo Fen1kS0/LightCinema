@@ -1,0 +1,16 @@
+@startuml
+class Movie <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Descriptions : string <<get>> <<set>>
+    + Year : int <<get>> <<set>>
+    + AgeLimit : int <<get>> <<set>>
+    + PosterLink : string <<get>> <<set>>
+    + ImageLink : string <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+Movie o-> "Genres<Genre>" "ICollection`1"
+Movie o-> "Countries<Country>" "ICollection`1"
+Movie o-> "Sessions<Session>" "ICollection`1"
+@enduml

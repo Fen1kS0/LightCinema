@@ -1,0 +1,10 @@
+@startuml
+class "Add`1"<T> {
+}
+class "ConfigureOptions`1"<T> {
+}
+class "AddTransient`1"<T> {
+}
+class "AddDbContext`1"<T> {
+}
+@enduml

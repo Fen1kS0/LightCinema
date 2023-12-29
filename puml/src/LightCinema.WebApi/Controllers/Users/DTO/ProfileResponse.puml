@@ -1,0 +1,18 @@
+@startuml
+class ProfileResponse <<sealed>> {
+    + <<required>> Login : string <<get>> <<set>>
+}
+class ReservationProfile <<sealed>> {
+    + <<required>> SessionId : int <<get>> <<set>>
+    + <<required>> SeatId : int <<get>> <<set>>
+    + <<required>> MovieName : string <<get>> <<set>>
+    + <<required>> Hall : int <<get>> <<set>>
+    + <<required>> Row : int <<get>> <<set>>
+    + <<required>> Number : int <<get>> <<set>>
+    + <<required>> DateTime : string <<get>> <<set>>
+    + <<required>> CanUnreserve : bool <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+ProfileResponse --> "Reserves<ReservationProfile>" "IEnumerable`1"
+@enduml

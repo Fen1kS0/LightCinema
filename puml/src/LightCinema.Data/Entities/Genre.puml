@@ -1,0 +1,9 @@
+@startuml
+class Genre <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+Genre o-> "Movies<Movie>" "ICollection`1"
+@enduml

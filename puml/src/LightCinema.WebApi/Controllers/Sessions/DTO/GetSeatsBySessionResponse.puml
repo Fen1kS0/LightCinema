@@ -1,0 +1,14 @@
+@startuml
+class GetSeatsBySessionResponse <<sealed>> {
+}
+class GetSeatDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Row : int <<get>> <<set>>
+    + <<required>> Number : int <<get>> <<set>>
+    + <<required>> Price : int <<get>> <<set>>
+    + <<required>> Reserved : bool <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetSeatsBySessionResponse --> "Seats<GetSeatDto>" "IEnumerable`1"
+@enduml

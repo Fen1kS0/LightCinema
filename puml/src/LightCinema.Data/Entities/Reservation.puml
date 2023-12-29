@@ -1,0 +1,10 @@
+@startuml
+class Reservation <<sealed>> {
+    + UserLogin : string <<get>> <<set>>
+    + SessionId : int <<get>> <<set>>
+    + SeatId : int <<get>> <<set>>
+}
+Reservation o-> "User" User
+Reservation o-> "Session" Session
+Reservation o-> "Seat" Seat
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class AuthDependencyInjection <<static>> {
+    + {static} AddCustomAuthentication(services:IServiceCollection, configuration:IConfiguration) : IServiceCollection
+    + {static} AddCustomAuthorization(services:IServiceCollection) : IServiceCollection
+}
+@enduml

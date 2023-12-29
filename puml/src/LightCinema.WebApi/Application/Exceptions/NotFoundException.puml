@@ -1,0 +1,6 @@
+@startuml
+class NotFoundException <<sealed>> {
+    + NotFoundException(message:string)
+}
+BaseException <|-- NotFoundException
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class ClientErrorResponse <<sealed>> {
+    + ClientErrorResponse(statusCode:int, errorMessage:string)
+    + StatusCode : int <<get>> <<set>>
+    + ErrorMessage : string <<get>> <<set>>
+}
+@enduml

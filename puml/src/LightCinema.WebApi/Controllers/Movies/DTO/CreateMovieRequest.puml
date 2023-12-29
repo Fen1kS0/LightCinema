@@ -1,0 +1,14 @@
+@startuml
+class CreateMovieRequest <<sealed>> {
+    + <<required>> Name : string <<get>> <<set>>
+    + <<required>> Descriptions : string <<get>> <<set>>
+    + <<required>> ImageLink : string <<get>> <<set>>
+    + <<required>> PosterLink : string <<get>> <<set>>
+    + <<required>> Year : int? <<get>> <<set>>
+    + <<required>> AgeLimit : int? <<get>> <<set>>
+}
+class "IReadOnlyCollection`1"<T> {
+}
+CreateMovieRequest --> "Genres<int>" "IReadOnlyCollection`1"
+CreateMovieRequest --> "Countries<int>" "IReadOnlyCollection`1"
+@enduml

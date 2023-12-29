@@ -1,0 +1,13 @@
+@startuml
+class MoviesController {
+    + MoviesController(dbContext:ApplicationDbContext)
+    + <<async>> GetMovies(dateType:DateType, withSessions:bool?) : Task<ActionResult<GetMoviesResponse>>
+    + <<async>> GetMoviesById(id:int) : Task<ActionResult<GetMovieByIdResponse>>
+    + <<async>> GetGenres() : Task<ActionResult<GetGenresResponse>>
+    + <<async>> GetCountries() : Task<ActionResult<GetCountriesResponse>>
+    + <<async>> CreateMovie(request:CreateMovieRequest) : Task<IActionResult>
+    + <<async>> UpdateMovie(id:int, request:UpdateMovieRequest) : Task<IActionResult>
+    + <<async>> DeleteMovie(id:int) : Task<IActionResult>
+}
+BaseController <|-- MoviesController
+@enduml

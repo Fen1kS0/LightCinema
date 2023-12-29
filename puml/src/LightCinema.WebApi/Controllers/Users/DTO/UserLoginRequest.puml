@@ -1,0 +1,6 @@
+@startuml
+class UserLoginRequest <<sealed>> {
+    + <<required>> Login : string <<get>> <<set>>
+    + <<required>> Password : string <<get>> <<set>>
+}
+@enduml

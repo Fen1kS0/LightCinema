@@ -1,0 +1,12 @@
+@startuml
+class SessionsController {
+    + SessionsController(dbContext:ApplicationDbContext)
+    + <<async>> GetSessionById(id:int) : Task<ActionResult<GetSessionByIdResponse>>
+    + <<async>> GetSeatsBySession(id:int) : Task<ActionResult<GetSeatsBySessionResponse>>
+    + <<async>> Reserve(id:int, request:ReserveRequest) : Task<IActionResult>
+    + <<async>> Unreserve(id:int, request:UnreserveRequest) : Task<IActionResult>
+    + <<async>> Create(request:CreateSessionRequest) : Task<IActionResult>
+    + <<async>> Delete(id:int) : Task<IActionResult>
+}
+BaseController <|-- SessionsController
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+class JwtService <<sealed>> {
+    + JwtService(jwtConfig:JwtConfig)
+    + GenerateAccessToken(claims:IEnumerable<Claim>) : string
+    + GenerateRefreshToken() : string
+    + GetPrincipalFromExpiredToken(token:string) : ClaimsPrincipal
+}
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+class Session <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + MovieId : int <<get>> <<set>>
+    + Hall : int <<get>> <<set>>
+    + Price : int <<get>> <<set>>
+    + IncreasedPrice : int <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+Session --> "Movie" Movie
+Session --> "Start" DateTimeOffset
+Session o-> "Reservations<Reservation>" "ICollection`1"
+@enduml

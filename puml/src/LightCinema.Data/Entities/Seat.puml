@@ -1,0 +1,12 @@
+@startuml
+class Seat <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Hall : int <<get>> <<set>>
+    + Row : int <<get>> <<set>>
+    + Number : int <<get>> <<set>>
+    + IsIncreasedPrice : bool <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+Seat o-> "Reservations<Reservation>" "ICollection`1"
+@enduml

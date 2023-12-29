@@ -1,0 +1,11 @@
+@startuml
+class GetGenresResponse <<sealed>> {
+}
+class GetGenreDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Name : string <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetGenresResponse --> "Genres<GetGenreDto>" "IEnumerable`1"
+@enduml

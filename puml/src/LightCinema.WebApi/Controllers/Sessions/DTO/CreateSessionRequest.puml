@@ -1,0 +1,9 @@
+@startuml
+class CreateSessionRequest <<sealed>> {
+    + MovieId : int <<get>> <<set>>
+    + HallNumber : int <<get>> <<set>>
+    + Price : int <<get>> <<set>>
+    + IncreasedPrice : int <<get>> <<set>>
+}
+CreateSessionRequest --> "DateTime" DateTime
+@enduml

@@ -67,7 +67,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Country", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Genre", b =>
@@ -85,7 +85,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genre", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Movie", b =>
@@ -123,7 +123,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movie", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Reservation", b =>
@@ -143,7 +143,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasIndex("UserLogin");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservation", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Seat", b =>
@@ -168,7 +168,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Seats", (string)null);
+                    b.ToTable("Seat", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.Session", b =>
@@ -198,7 +198,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Sessions", (string)null);
+                    b.ToTable("Session", (string)null);
                 });
 
             modelBuilder.Entity("LightCinema.Data.Entities.User", b =>
@@ -218,7 +218,7 @@ namespace LightCinema.Data.Migrations
 
                     b.HasKey("Login");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("CountryMovie", b =>

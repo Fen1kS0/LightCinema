@@ -8,7 +8,7 @@ public class SessionTypeConfiguration : IEntityTypeConfiguration<Session>
 {
     public void Configure(EntityTypeBuilder<Session> builder)
     {
-        builder.ToTable("Sessions");
+        builder.ToTable("Session");
         builder.HasKey(c => c.Id);
 
         builder.HasOne(g => g.Movie)

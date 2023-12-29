@@ -1,0 +1,13 @@
+@startuml
+class CreateHallRequest <<sealed>> {
+    + <<required>> Number : int <<get>> <<set>>
+}
+class CreateSeatDto <<sealed>> {
+    + <<required>> Row : int <<get>> <<set>>
+    + <<required>> Number : int <<get>> <<set>>
+    + <<required>> IsIncreasedPrice : bool <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+CreateHallRequest --> "Seats<CreateSeatDto>" "IEnumerable`1"
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class AccessDeniedException <<sealed>> {
+    + AccessDeniedException(message:string)
+}
+BaseException <|-- AccessDeniedException
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class BusinessException <<sealed>> {
+    + BusinessException(message:string)
+}
+BaseException <|-- BusinessException
+@enduml

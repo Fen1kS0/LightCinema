@@ -1,0 +1,9 @@
+@startuml
+class HallsController {
+    + HallsController(dbContext:ApplicationDbContext)
+    + <<async>> GetHalls() : Task<ActionResult<GetHallsResponse>>
+    + <<async>> CreateHall(request:CreateHallRequest) : Task<IActionResult>
+    + <<async>> DeleteHall(number:int) : Task<IActionResult>
+}
+BaseController <|-- HallsController
+@enduml

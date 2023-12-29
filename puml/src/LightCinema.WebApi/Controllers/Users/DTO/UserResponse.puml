@@ -1,0 +1,8 @@
+@startuml
+class UserResponse <<sealed>> {
+    + <<required>> Login : string <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+UserResponse --> "Reservations<Reservation>" "ICollection`1"
+@enduml

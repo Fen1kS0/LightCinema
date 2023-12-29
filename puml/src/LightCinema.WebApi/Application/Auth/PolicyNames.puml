@@ -1,0 +1,6 @@
+@startuml
+class PolicyNames <<static>> {
+    + <<const>> RequireAdministratorRole : string = "RequireAdministratorRole"
+    + <<const>> RequireVisitorRole : string = "RequireVisitorRole"
+}
+@enduml

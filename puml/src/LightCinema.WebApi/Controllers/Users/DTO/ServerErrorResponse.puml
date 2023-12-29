@@ -1,0 +1,8 @@
+@startuml
+class ServerErrorResponse <<sealed>> {
+    + ServerErrorResponse(statusCode:int, errorMessage:string, stackTrace:string?)
+    + StatusCode : int <<get>> <<set>>
+    + ErrorMessage : string <<get>> <<set>>
+    + StackTrace : string? <<get>> <<set>>
+}
+@enduml

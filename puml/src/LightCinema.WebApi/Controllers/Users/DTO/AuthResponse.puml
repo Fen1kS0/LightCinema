@@ -1,0 +1,8 @@
+@startuml
+class AuthResponse <<sealed>> {
+    + <<required>> AccessToken : string <<get>> <<set>>
+    + <<required>> RefreshToken : string <<get>> <<set>>
+    + <<required>> Login : string <<get>> <<set>>
+    + <<required>> Role : string <<get>> <<set>>
+}
+@enduml

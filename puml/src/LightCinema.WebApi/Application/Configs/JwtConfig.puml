@@ -1,0 +1,9 @@
+@startuml
+class JwtConfig <<sealed>> {
+    + Issuer : string <<get>> <<set>>
+    + Audience : string <<get>> <<set>>
+    + SecretKey : string <<get>> <<set>>
+    + AccessTokenExpiryInMinutes : int <<get>> <<set>>
+    + RefreshTokenExpiryInDays : int <<get>> <<set>>
+}
+@enduml

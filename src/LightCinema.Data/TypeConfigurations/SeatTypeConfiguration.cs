@@ -8,7 +8,7 @@ public class SeatTypeConfiguration : IEntityTypeConfiguration<Seat>
 {
     public void Configure(EntityTypeBuilder<Seat> builder)
     {
-        builder.ToTable("Seats");
+        builder.ToTable("Seat");
         builder.HasKey(c => c.Id);
     }
 }

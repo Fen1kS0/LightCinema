@@ -1,0 +1,13 @@
+@startuml
+class GetHallsResponse <<sealed>> {
+}
+class GetHallDto <<sealed>> {
+    + Number : int <<get>> <<set>>
+    + Rows : int <<get>> <<set>>
+    + SeatsInRow : int <<get>> <<set>>
+    + VipSeats : int <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetHallsResponse --> "Halls<GetHallDto>" "IEnumerable`1"
+@enduml

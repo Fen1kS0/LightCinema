@@ -8,7 +8,7 @@ public class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 {
     public void Configure(EntityTypeBuilder<Movie> builder)
     {
-        builder.ToTable("Movies");
+        builder.ToTable("Movie");
         builder.HasKey(c => c.Id);
         
         builder.Property(c => c.Name).HasMaxLength(250).IsRequired();

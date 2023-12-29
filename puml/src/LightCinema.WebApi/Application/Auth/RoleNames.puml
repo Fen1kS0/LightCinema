@@ -1,0 +1,6 @@
+@startuml
+class RoleNames <<static>> {
+    + <<const>> Admin : string = "Admin"
+    + <<const>> Visitor : string = "Visitor"
+}
+@enduml

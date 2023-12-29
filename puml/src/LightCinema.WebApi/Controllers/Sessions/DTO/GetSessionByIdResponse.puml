@@ -1,0 +1,16 @@
+@startuml
+class GetSessionByIdResponse <<sealed>> {
+    + <<required>> MovieId : int <<get>> <<set>>
+    + <<required>> MovieName : string <<get>> <<set>>
+    + <<required>> SessionsDate : string <<get>> <<set>>
+    + <<required>> AgeLimit : int <<get>> <<set>>
+}
+class OtherSessionDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Time : string <<get>> <<set>>
+    + <<required>> MinPrice : int <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetSessionByIdResponse --> "Sessions<OtherSessionDto>" "IEnumerable`1"
+@enduml

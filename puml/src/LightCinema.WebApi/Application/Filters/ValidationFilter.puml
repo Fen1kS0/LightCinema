@@ -1,0 +1,6 @@
+@startuml
+class ValidationFilter {
+    + <<async>> OnActionExecutionAsync(context:ActionExecutingContext, next:ActionExecutionDelegate) : Task
+}
+IAsyncActionFilter <|-- ValidationFilter
+@enduml

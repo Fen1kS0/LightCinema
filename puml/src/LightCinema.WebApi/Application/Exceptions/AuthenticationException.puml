@@ -1,0 +1,6 @@
+@startuml
+class AuthenticationException <<sealed>> {
+    + AuthenticationException(message:string)
+}
+BaseException <|-- AuthenticationException
+@enduml

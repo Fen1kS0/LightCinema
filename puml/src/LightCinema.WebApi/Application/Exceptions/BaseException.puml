@@ -1,0 +1,6 @@
+@startuml
+abstract class BaseException {
+    + StatusCode : int <<get>> <<set>>
+}
+Exception <|-- BaseException
+@enduml

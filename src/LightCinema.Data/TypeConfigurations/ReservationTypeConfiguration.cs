@@ -8,7 +8,7 @@ public class ReservationTypeConfiguration : IEntityTypeConfiguration<Reservation
 {
     public void Configure(EntityTypeBuilder<Reservation> builder)
     {
-        builder.ToTable("Reservations");
+        builder.ToTable("Reservation");
         builder.HasKey(r => new { r.SessionId, r.UserLogin, PlaceId = r.SeatId });
         
         builder.HasOne(r => r.Session)

@@ -1,0 +1,7 @@
+@startuml
+enum DateType {
+    Today,
+    Tomorrow,
+    Soon,
+}
+@enduml

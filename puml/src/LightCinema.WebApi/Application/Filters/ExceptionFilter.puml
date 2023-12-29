@@ -1,0 +1,7 @@
+@startuml
+class ExceptionFilter {
+    + ExceptionFilter(logger:ILogger<ExceptionFilter>)
+    + <<override>> <<async>> OnExceptionAsync(context:ExceptionContext) : Task
+}
+ExceptionFilterAttribute <|-- ExceptionFilter
+@enduml

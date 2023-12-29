@@ -1,0 +1,19 @@
+@startuml
+class GetMoviesResponse <<sealed>> {
+}
+class GetMovieDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Name : string <<get>> <<set>>
+    + <<required>> PosterLink : string <<get>> <<set>>
+    + Sessions : IEnumerable<GetMovieSessionDto>? <<get>> <<set>>
+}
+class GetMovieSessionDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Time : string <<get>> <<set>>
+    + <<required>> MinPrice : int <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetMoviesResponse --> "Movies<GetMovieDto>" "IEnumerable`1"
+GetMovieDto --> "Genres<string>" "IEnumerable`1"
+@enduml

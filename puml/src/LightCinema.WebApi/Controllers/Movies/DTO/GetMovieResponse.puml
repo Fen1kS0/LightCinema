@@ -1,0 +1,21 @@
+@startuml
+class GetMovieByIdResponse {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> Name : string <<get>> <<set>>
+    + <<required>> Description : string <<get>> <<set>>
+    + <<required>> CreatedYear : int <<get>> <<set>>
+    + <<required>> AgeLimit : int <<get>> <<set>>
+    + <<required>> ImageLink : string <<get>> <<set>>
+    + <<required>> PosterLink : string <<get>> <<set>>
+}
+class GetMovieByIdSessionDto <<sealed>> {
+    + <<required>> Id : int <<get>> <<set>>
+    + <<required>> DateTime : string <<get>> <<set>>
+    + <<required>> MinPrice : int <<get>> <<set>>
+}
+class "IEnumerable`1"<T> {
+}
+GetMovieByIdResponse --> "Countries<GetCountryDto>" "IEnumerable`1"
+GetMovieByIdResponse --> "Genres<GetGenreDto>" "IEnumerable`1"
+GetMovieByIdResponse --> "Sessions<GetMovieByIdSessionDto>" "IEnumerable`1"
+@enduml

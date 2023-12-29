@@ -1,0 +1,62 @@
+@startuml
+
+class Country <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+}
+
+class Genre <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+}
+
+class Movie <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Descriptions : string <<get>> <<set>>
+    + Year : int <<get>> <<set>>
+    + AgeLimit : int <<get>> <<set>>
+    + PosterLink : string <<get>> <<set>>
+    + ImageLink : string <<get>> <<set>>
+    + Genres : ICollection<Genre> <<get>> <<set>>
+    + Countries : ICollection<Country> <<get>> <<set>>
+}
+
+class Reservation <<sealed>> {
+    + User : User <<get>> <<set>>
+    + Session : Session <<get>> <<set>>
+    + Seat : Seat <<get>> <<set>>
+}
+
+class Seat <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Hall : int <<get>> <<set>>
+    + Row : int <<get>> <<set>>
+    + Number : int <<get>> <<set>>
+    + IsIncreasedPrice : bool <<get>> <<set>>
+}
+
+class Session <<sealed>> {
+    + Id : int <<get>> <<set>>
+    + Movie : Movie <<get>> <<set>>
+    + Hall : int <<get>> <<set>>
+    + Price : int <<get>> <<set>>
+    + IncreasedPrice : int <<get>> <<set>>
+}
+
+class User <<sealed>> {
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+}
+
+
+Movie o-> "Genres" Genre
+Movie o-> "Countries" Country
+
+Session --> "Movie" Movie
+
+Reservation o-> "User" User
+Reservation o-> "Session" Session
+Reservation o-> "Seat" Seat
+
+@enduml

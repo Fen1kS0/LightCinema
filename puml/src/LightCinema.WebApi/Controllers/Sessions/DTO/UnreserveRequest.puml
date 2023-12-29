@@ -1,0 +1,5 @@
+@startuml
+class UnreserveRequest <<sealed>> {
+    + <<required>> SeatId : int <<get>> <<set>>
+}
+@enduml

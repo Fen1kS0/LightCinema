@@ -13,7 +13,7 @@ namespace LightCinema.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Countries",
+                name: "Country",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -22,11 +22,11 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
+                    table.PrimaryKey("PK_Country", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Genre",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -35,11 +35,11 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movies",
+                name: "Movie",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -53,11 +53,11 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.PrimaryKey("PK_Movie", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Seats",
+                name: "Seat",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -69,11 +69,11 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seats", x => x.Id);
+                    table.PrimaryKey("PK_Seat", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Login = table.Column<string>(type: "text", nullable: false),
@@ -83,7 +83,7 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Login);
+                    table.PrimaryKey("PK_User", x => x.Login);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,15 +97,15 @@ namespace LightCinema.Data.Migrations
                 {
                     table.PrimaryKey("PK_CountryMovie", x => new { x.CountriesId, x.MoviesId });
                     table.ForeignKey(
-                        name: "FK_CountryMovie_Countries_CountriesId",
+                        name: "FK_CountryMovie_Country_CountriesId",
                         column: x => x.CountriesId,
-                        principalTable: "Countries",
+                        principalTable: "Country",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CountryMovie_Movies_MoviesId",
+                        name: "FK_CountryMovie_Movie_MoviesId",
                         column: x => x.MoviesId,
-                        principalTable: "Movies",
+                        principalTable: "Movie",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -121,21 +121,21 @@ namespace LightCinema.Data.Migrations
                 {
                     table.PrimaryKey("PK_GenreMovie", x => new { x.GenresId, x.MoviesId });
                     table.ForeignKey(
-                        name: "FK_GenreMovie_Genres_GenresId",
+                        name: "FK_GenreMovie_Genre_GenresId",
                         column: x => x.GenresId,
-                        principalTable: "Genres",
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenreMovie_Movies_MoviesId",
+                        name: "FK_GenreMovie_Movie_MoviesId",
                         column: x => x.MoviesId,
-                        principalTable: "Movies",
+                        principalTable: "Movie",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
+                name: "Session",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -148,17 +148,17 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.PrimaryKey("PK_Session", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sessions_Movies_MovieId",
+                        name: "FK_Session_Movie_MovieId",
                         column: x => x.MovieId,
-                        principalTable: "Movies",
+                        principalTable: "Movie",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservations",
+                name: "Reservation",
                 columns: table => new
                 {
                     UserLogin = table.Column<string>(type: "text", nullable: false),
@@ -167,23 +167,23 @@ namespace LightCinema.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservations", x => new { x.SessionId, x.UserLogin, x.SeatId });
+                    table.PrimaryKey("PK_Reservation", x => new { x.SessionId, x.UserLogin, x.SeatId });
                     table.ForeignKey(
-                        name: "FK_Reservations_Seats_SeatId",
+                        name: "FK_Reservation_Seat_SeatId",
                         column: x => x.SeatId,
-                        principalTable: "Seats",
+                        principalTable: "Seat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservations_Sessions_SessionId",
+                        name: "FK_Reservation_Session_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "Sessions",
+                        principalTable: "Session",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservations_Users_UserLogin",
+                        name: "FK_Reservation_User_UserLogin",
                         column: x => x.UserLogin,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Login",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -199,18 +199,18 @@ namespace LightCinema.Data.Migrations
                 column: "MoviesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_SeatId",
-                table: "Reservations",
+                name: "IX_Reservation_SeatId",
+                table: "Reservation",
                 column: "SeatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_UserLogin",
-                table: "Reservations",
+                name: "IX_Reservation_UserLogin",
+                table: "Reservation",
                 column: "UserLogin");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sessions_MovieId",
-                table: "Sessions",
+                name: "IX_Session_MovieId",
+                table: "Session",
                 column: "MovieId");
         }
 
@@ -224,25 +224,25 @@ namespace LightCinema.Data.Migrations
                 name: "GenreMovie");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
+                name: "Reservation");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "Country");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Genre");
 
             migrationBuilder.DropTable(
-                name: "Seats");
+                name: "Seat");
 
             migrationBuilder.DropTable(
-                name: "Sessions");
+                name: "Session");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
 
             migrationBuilder.DropTable(
-                name: "Movies");
+                name: "Movie");
         }
     }
 }
